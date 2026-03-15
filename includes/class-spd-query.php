@@ -26,7 +26,7 @@ class SPD_Query {
 				break;
 
 			case 'related':
-				$args = $this->apply_related_source( $args, $atts );
+				$args = $this->apply_related_source( $args );
 				break;
 
 			case 'ids':
@@ -74,7 +74,7 @@ class SPD_Query {
 		return $args;
 	}
 
-	private function apply_related_source( $args, $atts ) {
+	private function apply_related_source( $args ) {
 		if ( ! is_singular( 'post' ) ) {
 			$args['post__in'] = array( 0 );
 			return $args;

@@ -12,14 +12,12 @@ class SPD_Views {
 			return;
 		}
 
-		// ไม่นับ admin/editor ที่ล็อกอินอยู่
 		if ( is_user_logged_in() && current_user_can( 'edit_posts' ) ) {
 			return;
 		}
 
 		$cookie_name = 'spd_viewed_' . $post_id;
 
-		// กันรีเฟรชรัว ๆ ภายใน 1 ชั่วโมง
 		if ( isset( $_COOKIE[ $cookie_name ] ) ) {
 			return;
 		}

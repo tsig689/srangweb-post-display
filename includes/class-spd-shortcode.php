@@ -13,7 +13,7 @@ class SPD_Shortcode {
 	public function render_posts_shortcode( $atts ) {
 		$atts = shortcode_atts(
 			array(
-				'source'         => 'latest',   // latest, category, tag, related, ids
+				'source'         => 'latest',
 				'category'       => '',
 				'tag'            => '',
 				'ids'            => '',

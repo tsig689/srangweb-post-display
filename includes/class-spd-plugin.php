@@ -11,6 +11,16 @@ class SPD_Plugin {
 
 		$shortcode = new SPD_Shortcode();
 		$shortcode->register();
+
+		$updater = new SPD_GitHub_Updater(
+			SPD_FILE,
+			SPD_BASENAME,
+			'srangweb-post-display',
+			SPD_GITHUB_REPO,
+			SPD_GITHUB_TOKEN,
+			SPD_GITHUB_ASSET
+		);
+		$updater->init();
 	}
 
 	public function enqueue_assets() {

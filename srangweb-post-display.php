@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Srangweb Post Display
  * Description: Lightweight post display plugin with cards, views, category filter, pagination, and GitHub release auto-update.
- * Version: 1.1.5
+ * Version: 1.1.5a
  * Author: Srangweb
  * Text Domain: srangweb-post-display
  */

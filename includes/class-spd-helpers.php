@@ -1,0 +1,92 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+class SPD_Helpers {
+
+	public static function to_bool( $value ) {
+		if ( is_bool( $value ) ) {
+			return $value;
+		}
+
+		$value = strtolower( trim( (string) $value ) );
+
+		return in_array( $value, array( '1', 'true', 'yes', 'on' ), true );
+	}
+
+	public static function sanitize_csv_ids( $value ) {
+		if ( empty( $value ) ) {
+			return array();
+		}
+
+		$parts = array_map( 'trim', explode( ',', (string) $value ) );
+		$parts = array_filter( $parts, 'strlen' );
+		$ids   = array_map( 'absint', $parts );
+		$ids   = array_filter( $ids );
+
+		return array_values( array_unique( $ids ) );
+	}
+
+	public static function sanitize_columns( $value ) {
+		$value = absint( $value );
+
+		if ( $value < 1 ) {
+			$value = 3;
+		}
+
+		if ( $value > 4 ) {
+			$value = 4;
+		}
+
+		return $value;
+	}
+
+	public static function sanitize_limit( $value ) {
+		$value = absint( $value );
+
+		if ( $value < 1 ) {
+			$value = 6;
+		}
+
+		if ( $value > 50 ) {
+			$value = 50;
+		}
+
+		return $value;
+	}
+
+	public static function get_excerpt( $post_id, $length = 18 ) {
+		$length = absint( $length );
+
+		if ( $length < 1 ) {
+			$length = 18;
+		}
+
+		$excerpt = get_the_excerpt( $post_id );
+
+		if ( empty( $excerpt ) ) {
+			$content = get_post_field( 'post_content', $post_id );
+			$content = strip_shortcodes( $content );
+			$content = wp_strip_all_tags( $content );
+			return wp_trim_words( $content, $length, '...' );
+		}
+
+		return wp_trim_words( $excerpt, $length, '...' );
+	}
+
+	public static function get_first_category_name( $post_id ) {
+		$terms = get_the_category( $post_id );
+
+		if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+			return $terms[0]->name;
+		}
+
+		return '';
+	}
+
+	public static function format_views( $views ) {
+		$views = (int) $views;
+		return number_format_i18n( $views );
+	}
+}

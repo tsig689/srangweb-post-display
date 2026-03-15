@@ -1,8 +1,0 @@
-
-.spd-grid{display:grid;gap:20px}
-.spd-grid.columns-3{grid-template-columns:repeat(3,1fr)}
-.spd-grid.columns-2{grid-template-columns:repeat(2,1fr)}
-.spd-card{border:1px solid #ddd;border-radius:12px;overflow:hidden}
-.spd-thumb img{width:100%;height:220px;object-fit:cover}
-.spd-content{padding:16px}
-.spd-views{font-size:14px;color:#666;margin-top:6px}

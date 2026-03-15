@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Srangweb Post Display
- * Description: Lightweight post display plugin with shortcode, pagination, post views, and GitHub release auto-update support.
- * Version: 1.1.0
+ * Description: Lightweight post display plugin with cards, views, category filter, pagination, and GitHub release auto-update.
+ * Version: 1.1.4
  * Author: Srangweb
  * Text Domain: srangweb-post-display
  */
@@ -11,34 +11,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPD_VERSION', '1.1.0' );
+define( 'SPD_VERSION', '1.1.4' );
 define( 'SPD_FILE', __FILE__ );
 define( 'SPD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SPD_URL', plugin_dir_url( __FILE__ ) );
 define( 'SPD_BASENAME', plugin_basename( __FILE__ ) );
-
-/*
-|--------------------------------------------------------------------------
-| GitHub updater configuration
-|--------------------------------------------------------------------------
-| Change these 3 values after you create your GitHub repository.
-| Example:
-| SPD_GITHUB_REPO  => 'yourname/srangweb-post-display'
-| SPD_GITHUB_TOKEN => '' for public repo
-| SPD_GITHUB_ASSET => 'srangweb-post-display-v1.1.0.zip'
-|
-| Important:
-| 1) Create a GitHub Release.
-| 2) Attach the plugin ZIP file as a release asset.
-| 3) The updater will use that ZIP asset for one-click updates in WordPress.
-*/
 define( 'SPD_GITHUB_REPO', 'tsig689/srangweb-post-display' );
-define( 'SPD_GITHUB_TOKEN', '' ); // Optional. Usually leave blank for public repos.
-define( 'SPD_GITHUB_ASSET', 'srangweb-post-display-v1.1.0.zip' );
 
 require_once SPD_PATH . 'includes/class-spd-helpers.php';
 require_once SPD_PATH . 'includes/class-spd-pagination.php';
 require_once SPD_PATH . 'includes/class-spd-views.php';
+require_once SPD_PATH . 'includes/class-spd-filter.php';
 require_once SPD_PATH . 'includes/class-spd-query.php';
 require_once SPD_PATH . 'includes/class-spd-render.php';
 require_once SPD_PATH . 'includes/class-spd-shortcode.php';

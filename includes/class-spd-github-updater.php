@@ -9,19 +9,15 @@ class SPD_GitHub_Updater {
 	private $plugin_basename;
 	private $slug;
 	private $repo;
-	private $token;
-	private $preferred_asset;
 	private $cache_key;
 	private $cache_ttl = 3600;
 
-	public function __construct( $plugin_file, $plugin_basename, $slug, $repo, $token = '', $preferred_asset = '' ) {
-		$this->plugin_file      = $plugin_file;
-		$this->plugin_basename  = $plugin_basename;
-		$this->slug             = $slug;
-		$this->repo             = trim( (string) $repo );
-		$this->token            = trim( (string) $token );
-		$this->preferred_asset  = trim( (string) $preferred_asset );
-		$this->cache_key        = 'spd_github_release_' . md5( $this->repo );
+	public function __construct( $plugin_file, $plugin_basename, $slug, $repo ) {
+		$this->plugin_file     = $plugin_file;
+		$this->plugin_basename = $plugin_basename;
+		$this->slug            = $slug;
+		$this->repo            = trim( (string) $repo );
+		$this->cache_key       = 'spd_github_release_' . md5( $this->repo );
 	}
 
 	public function init() {
@@ -49,8 +45,6 @@ class SPD_GitHub_Updater {
 				'new_version' => $release['version'],
 				'package'     => $release['package'],
 				'url'         => $release['url'],
-				'tested'      => isset( $release['tested'] ) ? $release['tested'] : '',
-				'requires'    => isset( $release['requires'] ) ? $release['requires'] : '',
 			);
 		}
 
@@ -76,7 +70,7 @@ class SPD_GitHub_Updater {
 			'homepage'      => $release['url'],
 			'download_link' => $release['package'],
 			'sections'      => array(
-				'description' => '<p>Lightweight post display plugin with shortcode, pagination, post views, and GitHub release auto-update support.</p>',
+				'description' => '<p>Lightweight post display plugin with cards, views, category filter, pagination, and GitHub release auto-update.</p>',
 				'changelog'   => ! empty( $release['notes'] ) ? wp_kses_post( wpautop( $release['notes'] ) ) : '<p>No changelog provided.</p>',
 			),
 		);
@@ -93,19 +87,13 @@ class SPD_GitHub_Updater {
 			return array();
 		}
 
-		$headers = array(
-			'Accept'     => 'application/vnd.github+json',
-			'User-Agent' => 'WordPress/' . get_bloginfo( 'version' ) . '; ' . home_url( '/' ),
-		);
-
-		if ( ! empty( $this->token ) ) {
-			$headers['Authorization'] = 'Bearer ' . $this->token;
-		}
-
 		$request = wp_remote_get(
 			'https://api.github.com/repos/' . $this->repo . '/releases/latest',
 			array(
-				'headers' => $headers,
+				'headers' => array(
+					'Accept'     => 'application/vnd.github+json',
+					'User-Agent' => 'WordPress/' . get_bloginfo( 'version' ) . '; ' . home_url( '/' ),
+				),
 				'timeout' => 20,
 			)
 		);
@@ -114,9 +102,7 @@ class SPD_GitHub_Updater {
 			return array();
 		}
 
-		$code = (int) wp_remote_retrieve_response_code( $request );
-
-		if ( 200 !== $code ) {
+		if ( 200 !== (int) wp_remote_retrieve_response_code( $request ) ) {
 			return array();
 		}
 
@@ -152,14 +138,6 @@ class SPD_GitHub_Updater {
 	private function find_package_url( $release ) {
 		if ( empty( $release['assets'] ) || ! is_array( $release['assets'] ) ) {
 			return '';
-		}
-
-		if ( ! empty( $this->preferred_asset ) ) {
-			foreach ( $release['assets'] as $asset ) {
-				if ( ! empty( $asset['name'] ) && $asset['name'] === $this->preferred_asset && ! empty( $asset['browser_download_url'] ) ) {
-					return $asset['browser_download_url'];
-				}
-			}
 		}
 
 		foreach ( $release['assets'] as $asset ) {

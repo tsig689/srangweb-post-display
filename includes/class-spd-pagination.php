@@ -28,8 +28,7 @@ class SPD_Pagination {
 
 		$query_key = 'spd_page_' . $pager_id;
 		$base_url  = remove_query_arg( $query_key );
-
-		$links = paginate_links(
+		$links     = paginate_links(
 			array(
 				'base'      => esc_url( add_query_arg( $query_key, '%#%', $base_url ) ),
 				'format'    => '',

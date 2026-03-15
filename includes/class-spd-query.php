@@ -39,6 +39,8 @@ class SPD_Query {
 				break;
 		}
 
+		$args = $this->apply_filter_query( $args, $atts );
+
 		return new WP_Query( $args );
 	}
 
@@ -115,6 +117,22 @@ class SPD_Query {
 		$args['orderby']             = 'post__in';
 		$args['posts_per_page']      = min( count( $atts['ids'] ), $atts['limit'] );
 		$args['ignore_sticky_posts'] = true;
+
+		return $args;
+	}
+
+	private function apply_filter_query( $args, $atts ) {
+		if ( empty( $atts['show_filter'] ) ) {
+			return $args;
+		}
+
+		$active_slug = SPD_Filter::get_active_category_slug( $atts['pager_id'] );
+
+		if ( empty( $active_slug ) ) {
+			return $args;
+		}
+
+		$args['category_name'] = $active_slug;
 
 		return $args;
 	}

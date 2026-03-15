@@ -56,12 +56,22 @@ class SPD_Helpers {
 		return $value;
 	}
 
-	public static function get_excerpt( $post_id, $length = 18 ) {
-		$length = absint( $length );
+	public static function sanitize_excerpt_length( $value ) {
+		$value = absint( $value );
 
-		if ( $length < 1 ) {
-			$length = 18;
+		if ( $value < 1 ) {
+			$value = 18;
 		}
+
+		if ( $value > 80 ) {
+			$value = 80;
+		}
+
+		return $value;
+	}
+
+	public static function get_excerpt( $post_id, $length = 18 ) {
+		$length = self::sanitize_excerpt_length( $length );
 
 		$excerpt = get_the_excerpt( $post_id );
 
@@ -86,7 +96,12 @@ class SPD_Helpers {
 	}
 
 	public static function format_views( $views ) {
-		$views = (int) $views;
-		return number_format_i18n( $views );
+		return number_format_i18n( (int) $views );
+	}
+
+	public static function sanitize_custom_classes( $class_string ) {
+		$class_parts = preg_split( '/\s+/', trim( (string) $class_string ) );
+		$class_parts = array_filter( array_map( 'sanitize_html_class', $class_parts ) );
+		return implode( ' ', $class_parts );
 	}
 }

@@ -16,7 +16,7 @@ class SPD_Views {
 			return;
 		}
 
-		$cookie_name = 'spd_viewed_' . $post_id;
+		$cookie_name = 'spd_viewed_' . absint( $post_id );
 
 		if ( isset( $_COOKIE[ $cookie_name ] ) ) {
 			return;

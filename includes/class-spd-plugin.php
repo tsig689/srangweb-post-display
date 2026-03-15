@@ -16,22 +16,18 @@ class SPD_Plugin {
 			SPD_FILE,
 			SPD_BASENAME,
 			'srangweb-post-display',
-			SPD_GITHUB_REPO,
-			SPD_GITHUB_TOKEN,
-			SPD_GITHUB_ASSET
+			SPD_GITHUB_REPO
 		);
 		$updater->init();
 	}
 
 	public function enqueue_assets() {
-		wp_register_style(
+		wp_enqueue_style(
 			'spd-style',
 			SPD_URL . 'assets/css/spd-style.css',
 			array(),
 			SPD_VERSION
 		);
-
-		wp_enqueue_style( 'spd-style' );
 	}
 
 	public function track_post_views() {

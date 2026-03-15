@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPD_VERSION', '1.1.5b' );
+define( 'SPD_VERSION', '1.1.6' );
 define( 'SPD_FILE', __FILE__ );
 define( 'SPD_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SPD_URL', plugin_dir_url( __FILE__ ) );

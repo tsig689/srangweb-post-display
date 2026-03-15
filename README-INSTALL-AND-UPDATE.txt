@@ -1,4 +1,4 @@
-Srangweb Post Display v1.1.5
+Srangweb Post Display v1.1.6
 
 ระบบที่มีในเวอร์ชันนี้
 - Post grid

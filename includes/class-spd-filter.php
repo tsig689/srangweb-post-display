@@ -5,6 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SPD_Filter {
 
+	public static function get_filter_category_ids( $atts ) {
+		$terms = self::get_filter_categories( $atts );
+		if ( empty( $terms ) ) {
+			return array();
+		}
+		return array_map( 'absint', wp_list_pluck( $terms, 'term_id' ) );
+	}
+
 	public static function get_active_category_slug( $pager_id = 'main' ) {
 		$key = 'spd_filter_' . sanitize_key( $pager_id );
 
@@ -45,7 +53,7 @@ class SPD_Filter {
 		return $output;
 	}
 
-	private static function get_filter_categories( $atts ) {
+	public static function get_filter_categories( $atts ) {
 		// If source is category and a category is set, use siblings of that category if possible.
 		if ( 'category' === $atts['source'] && ! empty( $atts['category'] ) ) {
 			$base_cat = get_category_by_slug( $atts['category'] );

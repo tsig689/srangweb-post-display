@@ -128,11 +128,24 @@ class SPD_Query {
 
 		$active_slug = SPD_Filter::get_active_category_slug( $atts['pager_id'] );
 
-		if ( empty( $active_slug ) ) {
+		if ( ! empty( $active_slug ) ) {
+			unset( $args['category__in'] );
+			$args['category_name'] = $active_slug;
 			return $args;
 		}
 
-		$args['category_name'] = $active_slug;
+		/*
+		 * "All" should show all categories in the current filter set.
+		 * This is especially important when source="category".
+		 */
+		if ( 'category' === $atts['source'] ) {
+			$ids = SPD_Filter::get_filter_category_ids( $atts );
+
+			if ( ! empty( $ids ) ) {
+				unset( $args['category_name'] );
+				$args['category__in'] = $ids;
+			}
+		}
 
 		return $args;
 	}

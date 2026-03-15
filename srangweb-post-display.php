@@ -15,7 +15,7 @@ define('SPD_URL',plugin_dir_url(__FILE__));
 define('SPD_BASENAME',plugin_basename(__FILE__));
 
 /* CHANGE THIS AFTER CREATING YOUR REPO */
-define('SPD_GITHUB_REPO','https://github.com/tsig689/srangweb-post-display');
+define('SPD_GITHUB_REPO','tsig689/srangweb-post-display');
 
 require_once SPD_PATH.'includes/views.php';
 require_once SPD_PATH.'includes/query.php';

@@ -7,9 +7,11 @@ class SPD_Filter {
 
 	public static function get_filter_category_ids( $atts ) {
 		$terms = self::get_filter_categories( $atts );
+
 		if ( empty( $terms ) ) {
 			return array();
 		}
+
 		return array_map( 'absint', wp_list_pluck( $terms, 'term_id' ) );
 	}
 
@@ -36,15 +38,17 @@ class SPD_Filter {
 		}
 
 		$all_label = ! empty( $atts['filter_all_label'] ) ? $atts['filter_all_label'] : 'All';
-		$output    = '<div class="spd-filter">';
 
+		$output  = '<div class="spd-filter">';
 		$all_url = esc_url( remove_query_arg( $key, $base_url ) );
 		$all_cls = empty( $active ) ? ' is-active' : '';
+
 		$output .= '<a class="spd-filter-link' . esc_attr( $all_cls ) . '" href="' . $all_url . '">' . esc_html( $all_label ) . '</a>';
 
 		foreach ( $cats as $cat ) {
 			$url = esc_url( add_query_arg( $key, $cat->slug, $base_url ) );
 			$cls = ( $active === $cat->slug ) ? ' is-active' : '';
+
 			$output .= '<a class="spd-filter-link' . esc_attr( $cls ) . '" href="' . $url . '">' . esc_html( $cat->name ) . '</a>';
 		}
 
@@ -54,6 +58,20 @@ class SPD_Filter {
 	}
 
 	public static function get_filter_categories( $atts ) {
+		if ( ! empty( $atts['categories'] ) && is_array( $atts['categories'] ) ) {
+			$terms = get_terms(
+				array(
+					'taxonomy'   => 'category',
+					'hide_empty' => true,
+					'slug'       => array_map( 'sanitize_title', $atts['categories'] ),
+				)
+			);
+
+			if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
+				return $terms;
+			}
+		}
+
 		// If source is category and a category is set, use siblings of that category if possible.
 		if ( 'category' === $atts['source'] && ! empty( $atts['category'] ) ) {
 			$base_cat = get_category_by_slug( $atts['category'] );

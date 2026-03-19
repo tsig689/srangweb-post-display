@@ -39,6 +39,7 @@ class SPD_Query {
 				break;
 		}
 
+		$args = $this->apply_allowed_categories( $args, $atts );
 		$args = $this->apply_filter_query( $args, $atts );
 
 		return new WP_Query( $args );
@@ -59,6 +60,8 @@ class SPD_Query {
 	private function apply_category_source( $args, $atts ) {
 		if ( ! empty( $atts['category'] ) ) {
 			$args['category_name'] = $atts['category'];
+		} elseif ( ! empty( $atts['categories'] ) && is_array( $atts['categories'] ) ) {
+			$args['category_name'] = implode( ',', array_map( 'sanitize_title', $atts['categories'] ) );
 		} else {
 			$args['post__in'] = array( 0 );
 		}
@@ -83,7 +86,6 @@ class SPD_Query {
 		}
 
 		$current_post_id = get_queried_object_id();
-
 		if ( ! $current_post_id ) {
 			$args['post__in'] = array( 0 );
 			return $args;
@@ -113,10 +115,51 @@ class SPD_Query {
 			return $args;
 		}
 
-		$args['post__in']            = $atts['ids'];
-		$args['orderby']             = 'post__in';
-		$args['posts_per_page']      = min( count( $atts['ids'] ), $atts['limit'] );
-		$args['ignore_sticky_posts'] = true;
+		$args['post__in']              = $atts['ids'];
+		$args['orderby']               = 'post__in';
+		$args['posts_per_page']        = min( count( $atts['ids'] ), $atts['limit'] );
+		$args['ignore_sticky_posts']   = true;
+
+		return $args;
+	}
+
+	private function apply_allowed_categories( $args, $atts ) {
+		if ( empty( $atts['categories'] ) || ! is_array( $atts['categories'] ) ) {
+			return $args;
+		}
+
+		$term_ids = array();
+		foreach ( $atts['categories'] as $slug ) {
+			$term = get_category_by_slug( $slug );
+			if ( $term && ! is_wp_error( $term ) ) {
+				$term_ids[] = (int) $term->term_id;
+			}
+		}
+
+		if ( empty( $term_ids ) ) {
+			$args['post__in'] = array( 0 );
+			return $args;
+		}
+
+		if ( ! empty( $args['category_name'] ) ) {
+			$selected = get_category_by_slug( $args['category_name'] );
+			if ( $selected && ! is_wp_error( $selected ) ) {
+				if ( ! in_array( (int) $selected->term_id, $term_ids, true ) ) {
+					$args['post__in'] = array( 0 );
+				}
+			}
+			return $args;
+		}
+
+		if ( ! empty( $args['category__in'] ) && is_array( $args['category__in'] ) ) {
+			$args['category__in'] = array_values( array_intersect( array_map( 'absint', $args['category__in'] ), $term_ids ) );
+			if ( empty( $args['category__in'] ) ) {
+				$args['post__in'] = array( 0 );
+			}
+			return $args;
+		}
+
+		$args['category__in'] = $term_ids;
 
 		return $args;
 	}
@@ -127,7 +170,6 @@ class SPD_Query {
 		}
 
 		$active_slug = SPD_Filter::get_active_category_slug( $atts['pager_id'] );
-
 		if ( ! empty( $active_slug ) ) {
 			unset( $args['category__in'] );
 			$args['category_name'] = $active_slug;
@@ -138,9 +180,8 @@ class SPD_Query {
 		 * "All" should show all categories in the current filter set.
 		 * This is especially important when source="category".
 		 */
-		if ( 'category' === $atts['source'] ) {
+		if ( 'category' === $atts['source'] || ! empty( $atts['categories'] ) ) {
 			$ids = SPD_Filter::get_filter_category_ids( $atts );
-
 			if ( ! empty( $ids ) ) {
 				unset( $args['category_name'] );
 				$args['category__in'] = $ids;

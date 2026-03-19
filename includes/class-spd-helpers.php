@@ -27,6 +27,19 @@ class SPD_Helpers {
 
 		return array_values( array_unique( $ids ) );
 	}
+	public static function sanitize_csv_slugs( $value ) {
+	if ( is_array( $value ) ) {
+		$slugs = $value;
+	} else {
+		$slugs = explode( ',', (string) $value );
+	}
+
+	$slugs = array_map( 'sanitize_title', $slugs );
+	$slugs = array_filter( $slugs );
+	$slugs = array_values( array_unique( $slugs ) );
+
+	return $slugs;
+	}
 
 	public static function sanitize_columns( $value ) {
 		$value = absint( $value );

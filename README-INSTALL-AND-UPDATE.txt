@@ -1,13 +1,9 @@
-Srangweb Post Display v1.1.8
+Srangweb Post Display v1.1.9
 
-ระบบที่มีในเวอร์ชันนี้
-- Post grid
-- Source: latest / category / tag / ids / related
-- Category filter (front-end, non-AJAX)
-- Pagination with pager_id
-- Views counter
-- [sw_post_views]
-- GitHub Release auto-update
+= 1.1.9 =
+* Added category restriction via categories attribute
+* Added title-only display mode
+* Improved category filter behavior
 
 วิธีใช้หลัก
 [sw_posts source="latest" limit="6" columns="3"]

@@ -7,15 +7,58 @@ class SPD_Render {
 
 	public function render_posts( $query, $atts ) {
 		if ( ! $query->have_posts() ) {
-			return '<p class="spd-empty">' . esc_html__( 'No posts found.', 'srangweb-post-display' ) . '</p>';
+			return '<div class="spd-empty">' . esc_html__( 'No posts found.', 'srangweb-post-display' ) . '</div>';
 		}
 
-		$output  = '<div class="spd-grid columns-' . esc_attr( $atts['columns'] ) . '">';
+		if ( isset( $atts['display'] ) && 'title' === $atts['display'] ) {
+			return $this->render_title_list( $query, $atts );
+		}
+
+		$output = '<div class="spd-grid columns-' . esc_attr( absint( $atts['columns'] ) ) . '">';
+
 		while ( $query->have_posts() ) {
 			$query->the_post();
 			$output .= $this->render_card( get_the_ID(), $atts );
 		}
+
 		$output .= '</div>';
+
+		return $output;
+	}
+
+	private function render_title_list( $query, $atts ) {
+		$list_style = ! empty( $atts['title_list_style'] ) ? $atts['title_list_style'] : 'ul';
+		$wrapper    = in_array( $list_style, array( 'ul', 'ol' ), true ) ? $list_style : 'div';
+
+		$output = '<' . esc_attr( $wrapper ) . ' class="spd-title-list spd-title-list-' . esc_attr( $list_style ) . '">';
+
+		while ( $query->have_posts() ) {
+			$query->the_post();
+
+			$post_id = get_the_ID();
+			$title   = get_the_title( $post_id );
+			$link    = get_permalink( $post_id );
+
+			if ( 'div' === $wrapper ) {
+				$output .= '<div class="spd-title-item">';
+			} else {
+				$output .= '<li class="spd-title-item">';
+			}
+
+			if ( ! empty( $atts['show_title_link'] ) ) {
+				$output .= '<a class="spd-title-link" href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>';
+			} else {
+				$output .= '<span class="spd-title-text">' . esc_html( $title ) . '</span>';
+			}
+
+			if ( 'div' === $wrapper ) {
+				$output .= '</div>';
+			} else {
+				$output .= '</li>';
+			}
+		}
+
+		$output .= '</' . esc_attr( $wrapper ) . '>';
 
 		return $output;
 	}
@@ -26,6 +69,7 @@ class SPD_Render {
 		$excerpt       = SPD_Helpers::get_excerpt( $post_id, $atts['excerpt_length'] );
 		$category_name = SPD_Helpers::get_first_category_name( $post_id );
 		$views         = SPD_Views::get_views( $post_id );
+		$title_tag     = ! empty( $atts['title_tag'] ) ? $atts['title_tag'] : 'h3';
 
 		ob_start();
 		?>
@@ -42,7 +86,7 @@ class SPD_Render {
 						<div class="spd-meta spd-meta-top"><?php echo esc_html( $category_name ); ?></div>
 					<?php endif; ?>
 
-					<h3 class="spd-title"><?php echo esc_html( $title ); ?></h3>
+					<<?php echo esc_attr( $title_tag ); ?> class="spd-title"><?php echo esc_html( $title ); ?></<?php echo esc_attr( $title_tag ); ?>>
 
 					<?php if ( $atts['show_date'] || $atts['show_views'] ) : ?>
 						<div class="spd-meta">
@@ -55,7 +99,7 @@ class SPD_Render {
 							<?php endif; ?>
 
 							<?php if ( $atts['show_views'] ) : ?>
-								<span class="spd-views">👁 <?php echo esc_html( SPD_Helpers::format_views( $views ) ); ?></span>
+								<span class="spd-views"><?php echo esc_html( SPD_Helpers::format_views( $views ) ); ?></span>
 							<?php endif; ?>
 						</div>
 					<?php endif; ?>
@@ -67,7 +111,6 @@ class SPD_Render {
 			</a>
 		</article>
 		<?php
-
 		return ob_get_clean();
 	}
 }

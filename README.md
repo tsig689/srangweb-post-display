@@ -3,7 +3,7 @@
 A WordPress plugin for displaying posts with category filters, pagination, post views, and a title-only mode.
 
 ## Version
-2.1.2
+2.1.4
 
 ## New in 2.1.2
 - Added `categories` attribute to limit output to selected category slugs

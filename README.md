@@ -3,7 +3,11 @@
 A WordPress plugin for displaying posts with category filters, pagination, post views, and a title-only mode.
 
 ## Version
+<<<<<<< HEAD
 2.1.5
+
+2.1.4
+>>>>>>> 6a470887110bb0c5111bb3ef9f2927f8d97d3af7
 
 ## New in 2.1.5
 - Cleaned the release package and removed release-only files

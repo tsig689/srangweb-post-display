@@ -72,7 +72,6 @@ class SPD_Filter {
 			}
 		}
 
-		// If source is category and a category is set, use siblings of that category if possible.
 		if ( 'category' === $atts['source'] && ! empty( $atts['category'] ) ) {
 			$base_cat = get_category_by_slug( $atts['category'] );
 
@@ -82,11 +81,7 @@ class SPD_Filter {
 					'hide_empty' => true,
 				);
 
-				if ( $base_cat->parent ) {
-					$args['parent'] = (int) $base_cat->parent;
-				} else {
-					$args['parent'] = 0;
-				}
+				$args['parent'] = $base_cat->parent ? (int) $base_cat->parent : 0;
 
 				$terms = get_terms( $args );
 

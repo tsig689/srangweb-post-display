@@ -1,0 +1,22 @@
+{
+  "version": "2.1.2",
+  "tag": "v2.1.2",
+  "release_title": "Srangweb Post Display 2.1.2",
+  "zip_filename": "srangweb-post-display-v2.1.2.zip",
+  "root_folder_inside_zip": "srangweb-post-display",
+  "changed_files": [
+    "srangweb-post-display.php",
+    "includes/class-spd-helpers.php",
+    "includes/class-spd-shortcode.php",
+    "includes/class-spd-query.php",
+    "includes/class-spd-render.php",
+    "includes/class-spd-filter.php",
+    "includes/class-spd-pagination.php",
+    "includes/class-spd-plugin.php",
+    "includes/class-spd-views.php",
+    "includes/class-spd-github-updater.php",
+    "assets/css/spd.css",
+    "README.md",
+    "README-INSTALL-AND-UPDATE.txt"
+  ]
+}

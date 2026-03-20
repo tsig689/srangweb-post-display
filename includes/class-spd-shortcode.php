@@ -32,9 +32,9 @@ class SPD_Shortcode {
 				'orderby'           => 'date',
 				'order'             => 'DESC',
 				'class'             => '',
-				'display'           => 'card', // card | title
-				'title_tag'         => 'h3',   // used by card mode
-				'title_list_style'  => 'ul',   // ul | ol | div
+				'display'           => 'card',
+				'title_tag'         => 'h3',
+				'title_list_style'  => 'ul',
 				'show_title_link'   => 'true',
 			),
 			$atts,

@@ -5,46 +5,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class SPD_Views {
 
-	const META_KEY = 'spd_post_views';
-
-	public static function increment( $post_id ) {
-		if ( ! $post_id || 'post' !== get_post_type( $post_id ) ) {
+	public static function maybe_track_view() {
+		if ( ! is_singular( 'post' ) ) {
 			return;
 		}
 
-		if ( is_user_logged_in() && current_user_can( 'edit_posts' ) ) {
+		$post_id = get_queried_object_id();
+		if ( ! $post_id ) {
 			return;
 		}
 
-		$cookie_name = 'spd_viewed_' . absint( $post_id );
-
-		if ( isset( $_COOKIE[ $cookie_name ] ) ) {
-			return;
-		}
-
-		$count = (int) get_post_meta( $post_id, self::META_KEY, true );
-		$count++;
-
-		update_post_meta( $post_id, self::META_KEY, $count );
-
-		setcookie(
-			$cookie_name,
-			'1',
-			time() + HOUR_IN_SECONDS,
-			COOKIEPATH ? COOKIEPATH : '/',
-			COOKIE_DOMAIN,
-			is_ssl(),
-			true
-		);
+		$views = (int) get_post_meta( $post_id, '_spd_views', true );
+		update_post_meta( $post_id, '_spd_views', $views + 1 );
 	}
 
 	public static function get_views( $post_id ) {
-		$post_id = absint( $post_id );
-
-		if ( ! $post_id ) {
-			return 0;
-		}
-
-		return (int) get_post_meta( $post_id, self::META_KEY, true );
+		return (int) get_post_meta( $post_id, '_spd_views', true );
 	}
 }

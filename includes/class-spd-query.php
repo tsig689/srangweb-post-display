@@ -115,10 +115,10 @@ class SPD_Query {
 			return $args;
 		}
 
-		$args['post__in']              = $atts['ids'];
-		$args['orderby']               = 'post__in';
-		$args['posts_per_page']        = min( count( $atts['ids'] ), $atts['limit'] );
-		$args['ignore_sticky_posts']   = true;
+		$args['post__in']            = $atts['ids'];
+		$args['orderby']             = 'post__in';
+		$args['posts_per_page']      = min( count( $atts['ids'] ), $atts['limit'] );
+		$args['ignore_sticky_posts'] = true;
 
 		return $args;
 	}
@@ -160,7 +160,6 @@ class SPD_Query {
 		}
 
 		$args['category__in'] = $term_ids;
-
 		return $args;
 	}
 
@@ -170,16 +169,13 @@ class SPD_Query {
 		}
 
 		$active_slug = SPD_Filter::get_active_category_slug( $atts['pager_id'] );
+
 		if ( ! empty( $active_slug ) ) {
 			unset( $args['category__in'] );
 			$args['category_name'] = $active_slug;
 			return $args;
 		}
 
-		/*
-		 * "All" should show all categories in the current filter set.
-		 * This is especially important when source="category".
-		 */
 		if ( 'category' === $atts['source'] || ! empty( $atts['categories'] ) ) {
 			$ids = SPD_Filter::get_filter_category_ids( $atts );
 			if ( ! empty( $ids ) ) {

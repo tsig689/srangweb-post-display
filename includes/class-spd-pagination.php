@@ -6,45 +6,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 class SPD_Pagination {
 
 	public static function get_current_page( $pager_id = 'main' ) {
-		$pager_id  = sanitize_key( $pager_id );
-		$query_key = 'spd_page_' . $pager_id;
-
-		if ( isset( $_GET[ $query_key ] ) ) {
-			$page = absint( wp_unslash( $_GET[ $query_key ] ) );
-			return max( 1, $page );
+		$key = 'spd_page_' . sanitize_key( $pager_id );
+		if ( isset( $_GET[ $key ] ) ) {
+			return max( 1, absint( $_GET[ $key ] ) );
 		}
-
 		return 1;
 	}
 
 	public static function render( $max_pages, $current_page, $pager_id = 'main' ) {
-		$max_pages    = absint( $max_pages );
-		$current_page = absint( $current_page );
-		$pager_id     = sanitize_key( $pager_id );
-
 		if ( $max_pages <= 1 ) {
 			return '';
 		}
 
-		$query_key = 'spd_page_' . $pager_id;
-		$base_url  = remove_query_arg( $query_key );
-		$links     = paginate_links(
-			array(
-				'base'      => esc_url( add_query_arg( $query_key, '%#%', $base_url ) ),
-				'format'    => '',
-				'current'   => max( 1, $current_page ),
-				'total'     => max( 1, $max_pages ),
-				'mid_size'  => 1,
-				'prev_text' => '&laquo;',
-				'next_text' => '&raquo;',
-				'type'      => 'list',
-			)
-		);
+		$key     = 'spd_page_' . sanitize_key( $pager_id );
+		$base    = remove_query_arg( $key );
+		$output  = '<nav class="spd-pagination" aria-label="Posts pagination">';
 
-		if ( empty( $links ) ) {
-			return '';
+		for ( $i = 1; $i <= $max_pages; $i++ ) {
+			$url   = esc_url( add_query_arg( $key, $i, $base ) );
+			$class = 'spd-page-link' . ( (int) $i === (int) $current_page ? ' is-active' : '' );
+			$output .= '<a class="' . esc_attr( $class ) . '" href="' . $url . '">' . esc_html( $i ) . '</a>';
 		}
 
-		return '<nav class="spd-pagination" aria-label="Posts Pagination">' . $links . '</nav>';
+		$output .= '</nav>';
+		return $output;
 	}
 }

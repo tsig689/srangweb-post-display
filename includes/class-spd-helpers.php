@@ -11,81 +11,72 @@ class SPD_Helpers {
 		}
 
 		$value = strtolower( trim( (string) $value ) );
-
 		return in_array( $value, array( '1', 'true', 'yes', 'on' ), true );
 	}
 
 	public static function sanitize_csv_ids( $value ) {
-		if ( empty( $value ) ) {
-			return array();
+		if ( is_array( $value ) ) {
+			$ids = $value;
+		} else {
+			$ids = explode( ',', (string) $value );
 		}
 
-		$parts = array_map( 'trim', explode( ',', (string) $value ) );
-		$parts = array_filter( $parts, 'strlen' );
-		$ids   = array_map( 'absint', $parts );
-		$ids   = array_filter( $ids );
+		$ids = array_map( 'absint', $ids );
+		$ids = array_filter( $ids );
+		$ids = array_values( array_unique( $ids ) );
 
-		return array_values( array_unique( $ids ) );
+		return $ids;
 	}
+
 	public static function sanitize_csv_slugs( $value ) {
-	if ( is_array( $value ) ) {
-		$slugs = $value;
-	} else {
-		$slugs = explode( ',', (string) $value );
-	}
+		if ( is_array( $value ) ) {
+			$slugs = $value;
+		} else {
+			$slugs = explode( ',', (string) $value );
+		}
 
-	$slugs = array_map( 'sanitize_title', $slugs );
-	$slugs = array_filter( $slugs );
-	$slugs = array_values( array_unique( $slugs ) );
+		$slugs = array_map( 'sanitize_title', $slugs );
+		$slugs = array_filter( $slugs );
+		$slugs = array_values( array_unique( $slugs ) );
 
-	return $slugs;
+		return $slugs;
 	}
 
 	public static function sanitize_columns( $value ) {
 		$value = absint( $value );
-
 		if ( $value < 1 ) {
 			$value = 3;
 		}
-
 		if ( $value > 4 ) {
 			$value = 4;
 		}
-
 		return $value;
 	}
 
 	public static function sanitize_limit( $value ) {
 		$value = absint( $value );
-
 		if ( $value < 1 ) {
 			$value = 6;
 		}
-
 		if ( $value > 50 ) {
 			$value = 50;
 		}
-
 		return $value;
 	}
 
 	public static function sanitize_excerpt_length( $value ) {
 		$value = absint( $value );
-
 		if ( $value < 1 ) {
 			$value = 18;
 		}
-
 		if ( $value > 80 ) {
 			$value = 80;
 		}
-
 		return $value;
 	}
 
 	public static function get_excerpt( $post_id, $length = 18 ) {
-		$length = self::sanitize_excerpt_length( $length );
-
+		$length  = self::sanitize_excerpt_length( $length );
 		$excerpt = get_the_excerpt( $post_id );
 
 		if ( empty( $excerpt ) ) {
@@ -100,11 +91,9 @@ class SPD_Helpers {
 
 	public static function get_first_category_name( $post_id ) {
 		$terms = get_the_category( $post_id );
-
 		if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
 			return $terms[0]->name;
 		}
-
 		return '';
 	}
 

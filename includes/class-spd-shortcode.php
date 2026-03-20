@@ -34,7 +34,7 @@ class SPD_Shortcode {
 				'class'             => '',
 				'display'           => 'card',
 				'title_tag'         => 'h3',
-				'title_list_style'  => 'ul',   // ul | ol | none
+				'title_list_style'  => 'ul',
 				'show_title_link'   => 'true',
 			),
 			$atts,
@@ -79,12 +79,10 @@ class SPD_Shortcode {
 		$renderer      = new SPD_Render();
 
 		ob_start();
-
 		$wrap_class = 'spd-wrap';
 		if ( ! empty( $atts['class'] ) ) {
 			$wrap_class .= ' ' . $atts['class'];
 		}
-
 		if ( 'title' === $atts['display'] ) {
 			$wrap_class .= ' spd-wrap-title-only';
 		}
@@ -102,9 +100,7 @@ class SPD_Shortcode {
 		}
 
 		echo '</div>';
-
 		wp_reset_postdata();
-
 		return ob_get_clean();
 	}
 
@@ -123,7 +119,6 @@ class SPD_Shortcode {
 		if ( ! is_singular( 'post' ) ) {
 			return '';
 		}
-
 		$post_id = get_the_ID();
 		if ( ! $post_id ) {
 			return '';
@@ -141,17 +136,13 @@ class SPD_Shortcode {
 		}
 
 		$output = '';
-
 		if ( ! empty( $text ) ) {
 			$output .= $text . ' ';
 		}
-
 		if ( $show_icon ) {
 			$output .= '👁 ';
 		}
-
 		$output .= SPD_Helpers::format_views( $views );
-
 		if ( $show_label ) {
 			$output .= ' ครั้ง';
 		}

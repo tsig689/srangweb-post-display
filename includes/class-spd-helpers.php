@@ -4,12 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPD_Helpers {
-
 	public static function to_bool( $value ) {
 		if ( is_bool( $value ) ) {
 			return $value;
 		}
-
 		$value = strtolower( trim( (string) $value ) );
 		return in_array( $value, array( '1', 'true', 'yes', 'on' ), true );
 	}
@@ -20,12 +18,9 @@ class SPD_Helpers {
 		} else {
 			$ids = explode( ',', (string) $value );
 		}
-
 		$ids = array_map( 'absint', $ids );
 		$ids = array_filter( $ids );
-		$ids = array_values( array_unique( $ids ) );
-
-		return $ids;
+		return array_values( array_unique( $ids ) );
 	}
 
 	public static function sanitize_csv_slugs( $value ) {
@@ -34,18 +29,15 @@ class SPD_Helpers {
 		} else {
 			$slugs = explode( ',', (string) $value );
 		}
-
 		$slugs = array_map( 'sanitize_title', $slugs );
 		$slugs = array_filter( $slugs );
-		$slugs = array_values( array_unique( $slugs ) );
-
-		return $slugs;
+		return array_values( array_unique( $slugs ) );
 	}
 
 	public static function sanitize_columns( $value ) {
 		$value = absint( $value );
 		if ( $value < 1 ) {
-			$value = 3;
+			$value = 1;
 		}
 		if ( $value > 4 ) {
 			$value = 4;
@@ -76,16 +68,14 @@ class SPD_Helpers {
 	}
 
 	public static function get_excerpt( $post_id, $length = 18 ) {
-		$length  = self::sanitize_excerpt_length( $length );
+		$length = self::sanitize_excerpt_length( $length );
 		$excerpt = get_the_excerpt( $post_id );
-
 		if ( empty( $excerpt ) ) {
 			$content = get_post_field( 'post_content', $post_id );
 			$content = strip_shortcodes( $content );
 			$content = wp_strip_all_tags( $content );
 			return wp_trim_words( $content, $length, '...' );
 		}
-
 		return wp_trim_words( $excerpt, $length, '...' );
 	}
 

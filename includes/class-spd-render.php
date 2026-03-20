@@ -4,25 +4,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class SPD_Render {
-
 	public function render_posts( $query, $atts ) {
 		if ( ! $query->have_posts() ) {
 			return '<div class="spd-empty">' . esc_html__( 'No posts found.', 'srangweb-post-display' ) . '</div>';
 		}
-
 		if ( isset( $atts['display'] ) && 'title' === $atts['display'] ) {
 			return $this->render_title_list( $query, $atts );
 		}
 
 		$output = '<div class="spd-grid columns-' . esc_attr( absint( $atts['columns'] ) ) . '">';
-
 		while ( $query->have_posts() ) {
 			$query->the_post();
 			$output .= $this->render_card( get_the_ID(), $atts );
 		}
-
 		$output .= '</div>';
-
 		return $output;
 	}
 
@@ -31,54 +26,39 @@ class SPD_Render {
 
 		if ( 'none' === $list_style ) {
 			$output = '<div class="spd-title-list spd-title-list-none">';
-
 			while ( $query->have_posts() ) {
 				$query->the_post();
-
 				$post_id = get_the_ID();
 				$title   = get_the_title( $post_id );
 				$link    = get_permalink( $post_id );
-
 				$output .= '<div class="spd-title-item">';
-
 				if ( ! empty( $atts['show_title_link'] ) ) {
 					$output .= '<a class="spd-title-link" href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>';
 				} else {
 					$output .= '<span class="spd-title-text">' . esc_html( $title ) . '</span>';
 				}
-
 				$output .= '</div>';
 			}
-
 			$output .= '</div>';
-
 			return $output;
 		}
 
 		$wrapper = in_array( $list_style, array( 'ul', 'ol' ), true ) ? $list_style : 'ul';
-
 		$output = '<' . esc_attr( $wrapper ) . ' class="spd-title-list spd-title-list-' . esc_attr( $list_style ) . '">';
-
 		while ( $query->have_posts() ) {
 			$query->the_post();
-
 			$post_id = get_the_ID();
 			$title   = get_the_title( $post_id );
 			$link    = get_permalink( $post_id );
-
 			$output .= '<li class="spd-title-item">';
-
 			if ( ! empty( $atts['show_title_link'] ) ) {
 				$output .= '<a class="spd-title-link" href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>';
 			} else {
 				$output .= '<span class="spd-title-text">' . esc_html( $title ) . '</span>';
 			}
-
 			$output .= '</li>';
 		}
-
 		$output .= '</' . esc_attr( $wrapper ) . '>';
-
 		return $output;
 	}
 
@@ -99,7 +79,6 @@ class SPD_Render {
 						<?php echo get_the_post_thumbnail( $post_id, 'large', array( 'loading' => 'lazy' ) ); ?>
 					</div>
 				<?php endif; ?>
-
 				<div class="spd-content">
 					<?php if ( $atts['show_category'] && ! empty( $category_name ) ) : ?>
 						<div class="spd-meta spd-meta-top"><?php echo esc_html( $category_name ); ?></div>

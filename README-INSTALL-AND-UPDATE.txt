@@ -1,23 +1,31 @@
-Srangweb Post Display v2.1.5
+Srangweb Post Display - Install and Update
+===========================================
 
-= 2.1.5 =
-* Cleaned release package and removed unnecessary release-only files
-* Standardized title list style options to: ul, ol, none
-* Added support for title-only output without bullets or numbers
-* Added support for plain title output with show_title_link="false"
-* Aligned plugin package contents for GitHub release downloads
+Version: 2.1.6
 
-วิธีใช้หลัก
+Install
+-------
+1. Upload the `srangweb-post-display` folder to `/wp-content/plugins/`
+2. Activate the plugin in WordPress
 
-[sw_posts source="latest" limit="6" columns="3"]
-[sw_posts source="latest" limit="6" columns="3" pagination="true" pager_id="blog"]
-[sw_posts source="latest" limit="6" columns="3" pagination="true" pager_id="blog" show_views="true"]
-[sw_posts source="category" category="seo" limit="9" columns="3" pagination="true" pager_id="seo" show_filter="true"]
-[sw_posts categories="seo,wordpress,hosting" limit="6" show_filter="true"]
-[sw_posts categories="seo,wordpress" display="title" limit="10"]
-[sw_posts categories="seo,wordpress" display="title" title_list_style="ul" limit="10"]
-[sw_posts categories="seo,wordpress" display="title" title_list_style="ol" limit="10"]
-[sw_posts categories="seo,wordpress" display="title" title_list_style="none" limit="10"]
-[sw_posts categories="seo,wordpress" display="title" title_list_style="none" show_title_link="false" limit="10"]
-[sw_post_views]
-[sw_post_views text="อ่านแล้ว" icon="true" label="true"]
+GitHub auto-update
+------------------
+This package includes a GitHub release updater.
+
+For auto-update to work:
+- The plugin version in `srangweb-post-display.php` must match the release version
+- GitHub release tag should be like `v2.1.6`
+- Attach a zip asset named `srangweb-post-display-v2.1.6.zip`
+- The zip must contain a top-level folder named `srangweb-post-display`
+
+Recommended release flow
+------------------------
+1. Commit code changes
+2. Bump version to 2.1.6
+3. Create tag `v2.1.6`
+4. Upload `srangweb-post-display-v2.1.6.zip` to the GitHub release
+
+Notes
+-----
+- `title_list_style` supports: `ul`, `ol`, `none`
+- `none` means show titles without bullets or numbers

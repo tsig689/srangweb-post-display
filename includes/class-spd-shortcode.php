@@ -32,9 +32,9 @@ class SPD_Shortcode {
 				'orderby'           => 'date',
 				'order'             => 'DESC',
 				'class'             => '',
-				'display'           => 'card',
+				'display'           => 'card', // card | title
 				'title_tag'         => 'h3',
-				'title_list_style'  => 'ul',
+				'title_list_style'  => 'ul',   // ul | ol | none
 				'show_title_link'   => 'true',
 			),
 			$atts,
@@ -46,11 +46,11 @@ class SPD_Shortcode {
 		$allowed_order      = array( 'ASC', 'DESC' );
 		$allowed_display    = array( 'card', 'title' );
 		$allowed_title_tags = array( 'h2', 'h3', 'h4', 'div', 'p', 'span' );
-		$allowed_list_style = array( 'ul', 'ol', 'div' );
+		$allowed_list_style = array( 'ul', 'ol', 'none' );
 
 		$atts['source']           = in_array( sanitize_key( $atts['source'] ), $allowed_sources, true ) ? sanitize_key( $atts['source'] ) : 'latest';
 		$atts['category']         = sanitize_title( $atts['category'] );
-		$atts['categories']       = SPD_Helpers::sanitize_csv_slugs( $atts['categories'] );
+		$atts['categories']       = method_exists( 'SPD_Helpers', 'sanitize_csv_slugs' ) ? SPD_Helpers::sanitize_csv_slugs( $atts['categories'] ) : $atts['categories'];
 		$atts['tag']              = sanitize_title( $atts['tag'] );
 		$atts['ids']              = SPD_Helpers::sanitize_csv_ids( $atts['ids'] );
 		$atts['limit']            = SPD_Helpers::sanitize_limit( $atts['limit'] );

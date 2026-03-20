@@ -1,4 +1,9 @@
-Srangweb Post Display v2.1.2
+Srangweb Post Display v2.1.3
+
+= 2.1.3 =
+* Added List number
+* Turn bullet points on/off in the list
+
 
 = 2.1.2 =
 * Added category restriction via categories attribute

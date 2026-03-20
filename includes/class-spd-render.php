@@ -28,7 +28,34 @@ class SPD_Render {
 
 	private function render_title_list( $query, $atts ) {
 		$list_style = ! empty( $atts['title_list_style'] ) ? $atts['title_list_style'] : 'ul';
-		$wrapper    = in_array( $list_style, array( 'ul', 'ol' ), true ) ? $list_style : 'div';
+
+		if ( 'none' === $list_style ) {
+			$output = '<div class="spd-title-list spd-title-list-none">';
+
+			while ( $query->have_posts() ) {
+				$query->the_post();
+
+				$post_id = get_the_ID();
+				$title   = get_the_title( $post_id );
+				$link    = get_permalink( $post_id );
+
+				$output .= '<div class="spd-title-item">';
+
+				if ( ! empty( $atts['show_title_link'] ) ) {
+					$output .= '<a class="spd-title-link" href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>';
+				} else {
+					$output .= '<span class="spd-title-text">' . esc_html( $title ) . '</span>';
+				}
+
+				$output .= '</div>';
+			}
+
+			$output .= '</div>';
+
+			return $output;
+		}
+
+		$wrapper = in_array( $list_style, array( 'ul', 'ol' ), true ) ? $list_style : 'ul';
 
 		$output = '<' . esc_attr( $wrapper ) . ' class="spd-title-list spd-title-list-' . esc_attr( $list_style ) . '">';
 
@@ -39,11 +66,7 @@ class SPD_Render {
 			$title   = get_the_title( $post_id );
 			$link    = get_permalink( $post_id );
 
-			if ( 'div' === $wrapper ) {
-				$output .= '<div class="spd-title-item">';
-			} else {
-				$output .= '<li class="spd-title-item">';
-			}
+			$output .= '<li class="spd-title-item">';
 
 			if ( ! empty( $atts['show_title_link'] ) ) {
 				$output .= '<a class="spd-title-link" href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>';
@@ -51,11 +74,7 @@ class SPD_Render {
 				$output .= '<span class="spd-title-text">' . esc_html( $title ) . '</span>';
 			}
 
-			if ( 'div' === $wrapper ) {
-				$output .= '</div>';
-			} else {
-				$output .= '</li>';
-			}
+			$output .= '</li>';
 		}
 
 		$output .= '</' . esc_attr( $wrapper ) . '>';

@@ -3,7 +3,7 @@
  * Plugin Name: Srangweb Post Display
  * Plugin URI: https://github.com/tsig689/srangweb-post-display
  * Description: Display WordPress posts with category filtering, pagination, view counts, and title-only mode.
- * Version: 2.1.2
+ * Version: 2.1.3
  * Author: Srangweb
  * Author URI: https://www.srangweb.com/
  * Text Domain: srangweb-post-display
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SPD_VERSION', '2.1.2' );
+define( 'SPD_VERSION', '2.1.3' );
 define( 'SPD_PLUGIN_FILE', __FILE__ );
 define( 'SPD_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SPD_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

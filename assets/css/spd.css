@@ -14,7 +14,9 @@
 .spd-filter-link,.spd-page-link{display:inline-block;padding:8px 12px;border:1px solid #d1d5db;border-radius:999px;text-decoration:none;color:#111827}
 .spd-filter-link.is-active,.spd-page-link.is-active{font-weight:700}
 .spd-title-list{margin:0;padding-left:20px}
-.spd-title-list-div{padding-left:0}
+.spd-title-list-none{padding-left:0;list-style:none}
 .spd-title-item{margin:0 0 8px}
 .spd-title-link{text-decoration:none}
 .spd-pagination{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+
+.spd-title-list-none .spd-title-item{list-style:none}

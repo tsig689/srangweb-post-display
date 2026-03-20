@@ -32,7 +32,7 @@ class SPD_Shortcode {
 				'orderby'           => 'date',
 				'order'             => 'DESC',
 				'class'             => '',
-				'display'           => 'card', // card | title
+				'display'           => 'card',
 				'title_tag'         => 'h3',
 				'title_list_style'  => 'ul',   // ul | ol | none
 				'show_title_link'   => 'true',
@@ -50,7 +50,7 @@ class SPD_Shortcode {
 
 		$atts['source']           = in_array( sanitize_key( $atts['source'] ), $allowed_sources, true ) ? sanitize_key( $atts['source'] ) : 'latest';
 		$atts['category']         = sanitize_title( $atts['category'] );
-		$atts['categories']       = method_exists( 'SPD_Helpers', 'sanitize_csv_slugs' ) ? SPD_Helpers::sanitize_csv_slugs( $atts['categories'] ) : $atts['categories'];
+		$atts['categories']       = SPD_Helpers::sanitize_csv_slugs( $atts['categories'] );
 		$atts['tag']              = sanitize_title( $atts['tag'] );
 		$atts['ids']              = SPD_Helpers::sanitize_csv_ids( $atts['ids'] );
 		$atts['limit']            = SPD_Helpers::sanitize_limit( $atts['limit'] );
